@@ -1,0 +1,20 @@
+pipeline {
+    agent any
+    stages {
+        stage('Deploy to Airflow') {
+            steps {
+                //
+            }
+        }
+        stage('Execute DAG') {
+            steps {
+                //
+            }
+        }
+        stage('Visualize Data') {
+            steps {
+                //
+            }
+        }
+    }
+}
