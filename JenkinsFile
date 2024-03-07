@@ -3,17 +3,17 @@ pipeline {
     stages {
         stage('Deploy to Airflow') {
             steps {
-                //
+                sh 'echo Inside Airflow Deployment'
             }
         }
         stage('Execute DAG') {
             steps {
-                //
+                sh 'echo Inside DAG Execution'
             }
         }
         stage('Visualize Data') {
             steps {
-                //
+                sh 'echo Inside Data Visualization'
             }
         }
     }
