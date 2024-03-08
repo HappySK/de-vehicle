@@ -4,6 +4,7 @@ pipeline {
         stage('Deploy to Airflow') {
             steps {
                 sh 'echo Inside Airflow Deployment'
+                sh 'scp -r /var/lib/jenkins/workspace/ine_Vehicle_Data_Analysis_master/dags airflow_user@airflow:/home/airflow_user/airflow/dags'
             }
         }
         stage('Execute DAG') {
