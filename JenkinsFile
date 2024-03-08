@@ -6,7 +6,7 @@ pipeline {
                 sh 'echo Inside Airflow Deployment'
                 sh 'whoami'
                 sh 'pwd'
-                sh 'sudo scp -i /var/lib/jenkins/.ssh/id_rsa -r /var/lib/jenkins/workspace/ine_Vehicle_Data_Analysis_master/dags/ airflow_user@airflow:/home/airflow_user/airflow/dags'
+                sh 'sudo scp -i /var/lib/jenkins/.ssh/id_rsa -r /var/lib/jenkins/workspace/ine_Vehicle_Data_Analysis_master/dags/* airflow_user@airflow:/home/airflow_user/airflow/dags'
             }
         }
         stage('Execute DAG') {
