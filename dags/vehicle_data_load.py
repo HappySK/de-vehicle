@@ -47,9 +47,9 @@ with DAG(
 ):
 	pipeline_start = EmptyOperator(task_id='pipeline_start')
 	get_vehicle_data = BashOperator(task_id='ge_vehicel_data',bash_command='echo hello world')
-	submit_job = SparkSubmitOperator(
+	run_spark_task = SparkSubmitOperator(
 		application="${SPARK_HOME}/examples/src/main/python/pi.py", task_id="submit_job"
 	)
 	pipeline_end = EmptyOperator(task_id='pipeline_end')
 	
-pipeline_start >> get_vehicle_data >> pipeline_end
+pipeline_start >> get_vehicle_data >> run_spark_task >> pipeline_end
