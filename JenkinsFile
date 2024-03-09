@@ -9,15 +9,15 @@ pipeline {
                 sh 'sudo scp -i /var/lib/jenkins/.ssh/id_rsa -r /var/lib/jenkins/workspace/ine_Vehicle_Data_Analysis_master/dags/* airflow_user@airflow:/home/airflow_user/airflow/dags'
             }
         }
-        stage('Execute DAG') {
-            steps {
-                sh 'echo Inside DAG Execution'
-            }
-        }
-        stage('Visualize Data') {
-            steps {
-                sh 'echo Inside Data Visualization'
-            }
-        }
+//         stage('Execute DAG') {
+//             steps {
+//                 sh 'echo Inside DAG Execution'
+//             }
+//         }
+//         stage('Visualize Data') {
+//             steps {
+//                 sh 'echo Inside Data Visualization'
+//             }
+//         }
     }
 }
