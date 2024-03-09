@@ -31,6 +31,7 @@ import pendulum
 from airflow.models.dag import DAG
 from airflow.operators.bash import BashOperator
 from airflow.operators.empty import EmptyOperator
+from airflow.providers.apache.spark.operators.spark_submit import SparkSubmitOperator
 
 log = logging.getLogger(__name__)
 
@@ -46,6 +47,9 @@ with DAG(
 ):
 	pipeline_start = EmptyOperator(task_id='pipeline_start')
 	get_vehicle_data = BashOperator(task_id='ge_vehicel_data',bash_command='echo hello world')
+	submit_job = SparkSubmitOperator(
+		application="${SPARK_HOME}/examples/src/main/python/pi.py", task_id="submit_job"
+	)
 	pipeline_end = EmptyOperator(task_id='pipeline_end')
 	
 pipeline_start >> get_vehicle_data >> pipeline_end
