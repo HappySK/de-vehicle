@@ -46,10 +46,12 @@ with DAG(
     tags=["example"],
 ):
 	pipeline_start = EmptyOperator(task_id='pipeline_start')
-	get_vehicle_data = BashOperator(task_id='ge_vehicel_data',bash_command='printenv AIRFLOW_CONN_SPARK_DEFAULT')
-	run_spark_task = SparkSubmitOperator(
-		application="${SPARK_HOME}/examples/src/main/python/pi.py", task_id="submit_spark_job"
+	get_vehicle_data = SparkSubmitOperator(
+		application="airflow/spark_jobs/get_vehicle_data.py", task_id="get_vehicle_data"
+	)
+	load_vehicle_data = SparkSubmitOperator(
+		application="airflow/spark_jobs/load_vehicle_data.py", task_id="load_vehicle_data"
 	)
 	pipeline_end = EmptyOperator(task_id='pipeline_end')
 	
-pipeline_start >> get_vehicle_data >> run_spark_task >> pipeline_end
+pipeline_start >> get_vehicle_data >> load_vehicle_data >> pipeline_end
