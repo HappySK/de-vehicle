@@ -37,21 +37,21 @@ log = logging.getLogger(__name__)
 
 PATH_TO_PYTHON_BINARY = sys.executable
 
-
 with DAG(
-    dag_id="vehicle_data_load",
-    schedule=None,
-    start_date=pendulum.datetime(2021, 1, 1, tz="UTC"),
-    catchup=False,
-    tags=["example"],
+        dag_id="vehicle_data_load",
+        schedule=None,
+        start_date=pendulum.datetime(2021, 1, 1, tz="UTC"),
+        catchup=False,
+        tags=["example"],
 ):
-	pipeline_start = EmptyOperator(task_id='pipeline_start')
-	get_vehicle_data = SparkSubmitOperator(
-		conn_id='spark-connection', application="airflow/spark_jobs/get_vehicle_data.py", task_id="get_vehicle_data"
-	)
-	load_vehicle_data = SparkSubmitOperator(
-		conn_id='spark-connection', application="airflow/spark_jobs/load_vehicle_data.py", task_id="load_vehicle_data"
-	)
-	pipeline_end = EmptyOperator(task_id='pipeline_end')
-	
+    pipeline_start = EmptyOperator(task_id='pipeline_start')
+    get_vehicle_data = SparkSubmitOperator(
+        conn_id='spark-connection', application="airflow/spark_jobs/get_vehicle_data.py", task_id="get_vehicle_data"
+    )
+    load_vehicle_data = SparkSubmitOperator(
+        conn_id='spark-connection', application="airflow/spark_jobs/load_vehicle_data.py", task_id="load_vehicle_data",
+		files='vehicles_makes.csv'
+    )
+    pipeline_end = EmptyOperator(task_id='pipeline_end')
+
 pipeline_start >> get_vehicle_data >> load_vehicle_data >> pipeline_end
