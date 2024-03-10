@@ -1,5 +1,6 @@
 import requests, os
 from pyspark.sql import SparkSession
+from airflow.providers.apache.hdfs.hooks.webhdfs import WebHDFSHook
 
 spark = SparkSession.builder.appName('get_vehicle_data').getOrCreate()
 
@@ -9,5 +10,8 @@ with open('vehicle_makes.csv', 'w') as f:
     f.write(res.text)
 print('Write Completed')
 
-makes_df = spark.read.option('header','true').csv('/home/airflow_user/vehicle_makes.csv')
-makes_df.write.csv('hdfs://spark-driver.desk.home:9000/vehicle_csv')
+conn = WebHDFSHook('webhdfs-connection')
+
+conn.load_file('vehicle_makes.csv','hdfs://spark-driver.desk.home:50070/user/spark_driver_user/vehicle_makes.csv',True,1)
+
+print('Load to HDFS completed')
