@@ -1,8 +1,5 @@
 import requests, os
-from pyspark.sql import SparkSession
 from airflow.providers.apache.hdfs.hooks.webhdfs import WebHDFSHook
-
-spark = SparkSession.builder.appName('get_vehicle_data').getOrCreate()
 
 base_url = 'https://vpic.nhtsa.dot.gov/api'
 res = requests.get(f'{base_url}/vehicles/GetAllMakes?format=csv')
