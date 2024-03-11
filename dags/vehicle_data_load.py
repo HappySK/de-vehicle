@@ -46,7 +46,7 @@ with DAG(
 ):
     pipeline_start = EmptyOperator(task_id='pipeline_start')
     get_vehicle_data = BashOperator(
-        task_id="get_vehicle_data", bash_command='python3 airflow/spark_jobs/get_vehicle_data.py'
+        task_id="get_vehicle_data", bash_command='python3 /home/airflow_user/airflow/spark_jobs/get_vehicle_data.py'
     )
     load_vehicle_data = SparkSubmitOperator(
         conn_id='spark-connection', application="airflow/spark_jobs/load_vehicle_data.py", task_id="load_vehicle_data",
