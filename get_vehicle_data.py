@@ -9,6 +9,6 @@ print('Write Completed')
 
 conn = WebHDFSHook('webhdfs-connection')
 
-conn.load_file('vehicle_makes.csv','hdfs://spark-driver.desk.home:50070/user/spark_driver_user/vehicle_makes.csv',True,1)
+conn.load_file('vehicle_makes.csv','vehicle_makes.csv',True,1)
 
 print('Load to HDFS completed')
