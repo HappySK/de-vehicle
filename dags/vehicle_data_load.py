@@ -23,8 +23,6 @@ from __future__ import annotations
 
 import logging
 import sys
-import time
-from pprint import pprint
 
 import pendulum
 
@@ -32,6 +30,8 @@ from airflow.models.dag import DAG
 from airflow.operators.bash import BashOperator
 from airflow.operators.empty import EmptyOperator
 from airflow.providers.apache.spark.operators.spark_submit import SparkSubmitOperator
+from airflow.providers.apache.spark.operators.spark_jdbc import SparkJDBCOperator
+
 
 log = logging.getLogger(__name__)
 
@@ -51,6 +51,9 @@ with DAG(
     load_vehicle_data = SparkSubmitOperator(
         conn_id='spark-connection', application="airflow/spark_jobs/load_vehicle_data.py", task_id="load_vehicle_data"
     )
+    load_data_spark_to_mysql = SparkJDBCOperator(spark_app_name='load_vehicle_makes_to_mysql',spark_conn_id='spark-connection',cmd_type='spark_to_jdbc',
+                                                 jdbc_table='makes', jdbc_conn_id='jdbc_conn_id',jdbc_driver='com.mysql.jdbc.Driver',spark_jars='/home/airflow_user/spark/jars/mysql.jar',
+                                                 metastore_table='makes',save_mode='overwrite',task_id='load_into_mysql')
     pipeline_end = EmptyOperator(task_id='pipeline_end')
 
-pipeline_start >> get_vehicle_data >> load_vehicle_data >> pipeline_end
+pipeline_start >> get_vehicle_data >> load_vehicle_data >> load_data_spark_to_mysql >> pipeline_end
