@@ -1,5 +1,4 @@
 from pyspark.sql import SparkSession
-from airflow.models.connection import Connection
 
 spark = SparkSession.builder.appName('vehicle_makes').getOrCreate()
 makes = spark.read.option('header', 'true').csv(
