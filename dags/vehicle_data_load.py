@@ -30,28 +30,29 @@ from airflow.models.dag import DAG
 from airflow.operators.bash import BashOperator
 from airflow.operators.empty import EmptyOperator
 from airflow.providers.apache.spark.operators.spark_submit import SparkSubmitOperator
-from airflow.providers.apache.spark.operators.spark_jdbc import SparkJDBCOperator
-
 
 log = logging.getLogger(__name__)
 
 PATH_TO_PYTHON_BINARY = sys.executable
 
-with DAG(
-        dag_id="vehicle_data_load",
-        schedule=None,
-        start_date=pendulum.datetime(2021, 1, 1, tz="UTC"),
-        catchup=False,
-        tags=["example"],
-):
-    pipeline_start = EmptyOperator(task_id='pipeline_start')
-    get_vehicle_data = BashOperator(
-        task_id="get_vehicle_data", bash_command='python3 /home/airflow_user/airflow/spark_jobs/get_vehicle_data.py'
-    )
-    load_vehicle_data = SparkSubmitOperator(
-        conn_id='spark-connection', application="airflow/spark_jobs/load_vehicle_data.py", task_id="load_vehicle_data",
-        jars='/home/airflow_user/airflow/spark/jar/mysql.jar'
-    )
-    pipeline_end = EmptyOperator(task_id='pipeline_end')
+for api in ('GetAllMakes', 'GetAllManufacturers', 'GetManufacturerDetails'):
+    with DAG(
+            dag_id="vehicle_data_load",
+            schedule=None,
+            start_date=pendulum.datetime(2021, 1, 1, tz="UTC"),
+            catchup=False,
+            tags=["example"],
+    ):
+        pipeline_start = EmptyOperator(task_id='pipeline_start')
+        get_vehicle_data = BashOperator(
+            task_id="get_vehicle_data", bash_command=f'python3 /home/airflow_user/airflow/spark_jobs/get_vehicle_data.py {api}'
+        )
+        load_vehicle_data = SparkSubmitOperator(
+            conn_id='spark-connection', application="airflow/spark_jobs/load_vehicle_data.py",
+            task_id="load_vehicle_data",
+            jars='/home/airflow_user/airflow/spark/jar/mysql.jar',
+            application_args=[api]
+        )
+        pipeline_end = EmptyOperator(task_id='pipeline_end')
 
-pipeline_start >> get_vehicle_data >> load_vehicle_data >> pipeline_end
+    pipeline_start >> get_vehicle_data >> load_vehicle_data >> pipeline_end
