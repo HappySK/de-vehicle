@@ -10,6 +10,6 @@ print(f'Write Completed for {api_action}')
 
 conn = WebHDFSHook('webhdfs-connection')
 
-conn.load_file('vehicle_makes.csv', 'vehicle_makes.csv', True, 1)
+conn.load_file(f'{api_action}.csv', f'{api_action}.csv', True, 1)
 
 print(f'Load to HDFS completed for {api_action}')
