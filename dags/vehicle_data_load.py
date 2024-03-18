@@ -37,11 +37,11 @@ PATH_TO_PYTHON_BINARY = sys.executable
 
 for api in ('GetAllMakes', 'GetAllManufacturers', 'GetManufacturerDetails'):
     with DAG(
-            dag_id="vehicle_data_load",
+            dag_id=api,
             schedule=None,
             start_date=pendulum.datetime(2021, 1, 1, tz="UTC"),
             catchup=False,
-            tags=["example"],
+            tags=["vehicle"],
     ):
         pipeline_start = EmptyOperator(task_id='pipeline_start')
         get_vehicle_data = BashOperator(
