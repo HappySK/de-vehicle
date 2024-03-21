@@ -3,7 +3,7 @@ import sys
 from pyspark.sql import SparkSession
 from airflow.models import Variable
 
-mysql_pwd = Variable.get("foo")
+mysql_pwd = Variable.get("mysql_password")
 
 api_action = sys.argv[1]
 table_name = api_action.replace('Get', '')
